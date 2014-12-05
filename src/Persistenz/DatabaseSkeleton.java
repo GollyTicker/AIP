@@ -33,6 +33,13 @@ public class DatabaseSkeleton extends Thread {
     }
 
     private String respondToCall(String call) {
-        //TODO parse crud
+        //TODO parse to crud operation on dbService
+    }
+
+    public void shutdown() {
+        interrupt();
+        try {
+            connectionSocket.close();
+        } catch (IOException ex) {}
     }
 }

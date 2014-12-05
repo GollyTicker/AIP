@@ -3,6 +3,8 @@ package Persistenz;
 import Utilities.TechnicalException;
 
 import java.net.ServerSocket;
+import java.net.Socket;
+import java.io.*;
 
 /**
  * Created by croehricht on 05.12.14.
@@ -20,7 +22,6 @@ public class DatabaseServer extends Thread {
         } catch (TechnicalException ex) {}
         try {
             this.server = new ServerSocket(port);
-            //TODO dbService
         } catch (IOException ex) {}
     }
 
@@ -28,8 +29,22 @@ public class DatabaseServer extends Thread {
         while (!isInterrupted()) {
             try {
                 Socket connectionSocket = server.accept();
-                skeletons.add(new DatabaseSkeleton(connectionSocket, dbService));
-            } catch (IOException ex) {}
+                DatabaseSkeleton skel = new DatabaseSkeleton(connectionSocket, dbService)
+                skeletons.add(skel);
+                skel.start();
+            } catch (IOException ex) {
+                Thread.currentThread().interrupt();
+            }
         }
+    }
+
+    public void shutdown() {
+        for (DatabaseSkeleton skel : skeletons) {
+            skel.shutdown();
+        }
+        interrupt();
+        try {
+            server.close();
+        } catch (IOException ex) {}
     }
 }
