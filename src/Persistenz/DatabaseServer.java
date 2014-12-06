@@ -5,24 +5,25 @@ import Utilities.TechnicalException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by croehricht on 05.12.14.
  */
 public class DatabaseServer extends Thread {
-    private int port;
+    public final static int DB_PORT = 9500;
     private ServerSocket server;
-    private List<DatabaseSkeleton> skeletons;
+    private List<DatabaseSkeleton> skeletons = new ArrayList<>();
     private IPersistenzService dbService;
 
-    public DatabaseServer(int port) {
-        this.port = port;
+    public DatabaseServer() {
         try {
             this.dbService = new DatabaseConnection();
         } catch (TechnicalException ex) {}
         try {
-            this.server = new ServerSocket(port);
+            this.server = new ServerSocket(DB_PORT);
+            System.out.println("DatabaseServer ["+ DatabaseServer.DB_PORT+"]");
         } catch (IOException ex) {}
     }
 

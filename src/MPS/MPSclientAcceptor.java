@@ -7,14 +7,14 @@ import java.net.Socket;
 /**
  * Created by Swaneet on 05.12.2014.
  */
-public class MPSServer extends Thread {
+public class MPSclientAcceptor extends Thread {
     ServerSocket serverSocket;
     int port;
     Processor p;
 
     // For each MPS Instance the MPS server listens for the Dispatcher to connect and process its requests.
 
-    public MPSServer(int skeletonPort, Processor p) {
+    public MPSclientAcceptor(int skeletonPort, Processor p) {
         this.port = skeletonPort;
         this.p = p;
         try {

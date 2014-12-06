@@ -31,25 +31,6 @@ public class MPSConnector implements IAuftragServicesFuerCallCenterUI {
     // simulates the MPS system from inside the Dispatcher.
     // needs the port on which the MPS server is listening.
 
-    public static void main(String[] args) throws IOException {
-        MPSConnector mps = new MPSConnector(9301);
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Write to test, f.e. \"15\". \"q\" to quit.");
-        String s =in.readLine();
-        while (! s.equals("q")) {
-            try {
-                AuftragsNr nr = mps.erstelleAuftrag(angebotsNr(parseInt(s)));
-                System.out.println("Response: AuftragsNr: " + nr);
-            } catch (NotFoundException e) {
-                e.printStackTrace();
-            } catch (TechnicalException e) {
-                e.printStackTrace();
-            }
-            System.out.println("Write to test, f.e. \"15\". \"q\" to quit.");
-            s = in.readLine();
-        }
-    }
-
     public MPSConnector(int port) throws IOException {
         this.port = port;
         this.mpssocket = new Socket("localhost", port);
@@ -58,7 +39,6 @@ public class MPSConnector implements IAuftragServicesFuerCallCenterUI {
         reader = new BufferedReader(new InputStreamReader(inputStream));
         writer = new DataOutputStream(outputStream);
     }
-
 
     @Override
     public AuftragsNr erstelleAuftrag(AngebotsNr nr) throws NotFoundException, TechnicalException {

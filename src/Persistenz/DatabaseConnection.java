@@ -10,7 +10,6 @@ import static Utilities.TechnicalException.throwNewTechnicalException;
 
 public class DatabaseConnection implements IPersistenzService {
 
-    public final static int DB_PORT = 9500;
     public final static String ANGEBOT = "angebot";
     public final static String AUFTRAG = "auftrag";
     public final static String BAUTEIL = "bauteil";

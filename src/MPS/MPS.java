@@ -11,6 +11,7 @@ import Materialkomponente.IMaterialServicesFuerFertigung;
 import Materialkomponente.MaterialKomponente;
 import Persistenz.DatabaseConnection;
 import Persistenz.DatabaseConnector;
+import Persistenz.DatabaseServer;
 import Persistenz.IPersistenzService;
 
 import static Wartung.Monitor.MONITOR_LISTENER_PORT;
@@ -23,13 +24,14 @@ import static Wartung.Monitor.MONITOR_LISTENER_PORT;
 public class MPS {
     IAuftragServicesFuerCallCenterUI afServ;
     static int MPS_BASE_PORT = 9300;
-    static boolean INTEGRATED = false;   // set to true, to integrate it with other processes.
+    static boolean INTEGRATED = true;   // set to true, to integrate it with other processes.
     public MPS(int num) throws Exception {
         // Konnektor zur Persistenz
-        int port = DatabaseConnection.DB_PORT;
+        int port = DatabaseServer.DB_PORT;
         IPersistenzService pServ;
         if (INTEGRATED) {
             pServ = new DatabaseConnector(port); // korrekte Version
+            System.out.println("MPS: Verbindung zur DB aufgebaut.");
         }
         else {
             pServ = new DatabaseConnection();// Version zum testen
@@ -48,14 +50,11 @@ public class MPS {
         new MPSSkeleton(MPS_BASE_PORT+num, afServ);
 
         // I am Alive Thread starten
-        if (INTEGRATED) {
-            new MPSReporter(num, MONITOR_LISTENER_PORT);
-        }
+        //if (INTEGRATED) {
+        //    new MPSReporter(num, MONITOR_LISTENER_PORT);
+        //}
 
-        if (!INTEGRATED) {
-            // Beispielangebot erzeugen:
-            int anr = pServ.create(DatabaseConnection.ANGEBOT,"15,2,7,14.2");
-            System.out.println("beispielangebot erzeugt ["+anr+"]");
-        }
+        int anr = pServ.create(DatabaseConnection.ANGEBOT,"15,2,7,14.2");
+        System.out.println("beispielangebot erzeugt ["+anr+"]");
     }
 }

@@ -1,10 +1,6 @@
 package MPS;
 
-import Angebotskomponente.AngebotsNr;
-import Auftragskomponente.AuftragsNr;
 import Auftragskomponente.IAuftragServicesFuerCallCenterUI;
-import Utilities.NotFoundException;
-import Utilities.TechnicalException;
 
 /**
  * Created by Swaneet on 04.12.2014.
@@ -19,6 +15,6 @@ public class MPSSkeleton {
         // listen on Port skeletonPort and return the results
         Processor p = new Processor(afServ);
         // for each new Client start new Thread and process methods
-        new MPSServer(skeletonPort, p).start();
+        new MPSclientAcceptor(skeletonPort, p).start();
     }
 }
