@@ -16,19 +16,39 @@ import static Utilities.Constants.SEP;
 /**
  * Created by Swaneet on 04.12.2014.
  */
-public class MPSReporter {
+public class MPSReporter extends Thread{
     // reports the current status to the monitor.
     DataOutputStream writer;
     Map<String, Integer> usages = new HashMap();
-    public MPSReporter(int num, int port) throws IOException, InterruptedException {
-        Socket s = new Socket("localhost", port);
-        writer = new DataOutputStream(s.getOutputStream());
-        while(true) {
-            send(ALIVE + SEP + usagesToString());   // sends string of the form "ALIVE;Usages;erstelleAuftrag,15;bla,16"
-            Thread.sleep(ALIVE_INTERVAL_MILLIS);
-        }
+    int wait = 300;
+    int num;
+    int port;
+    public MPSReporter(int num, int port){
+        this.num = num;
+        this.port = port;
     }
 
+    public void run() {
+        try {
+            Socket s = null;
+            while (s == null) {
+                try {
+                    s = new Socket("localhost", port);
+                } catch (IOException e) {
+                    System.out.println("MPSReporter: Failed to connect to Monitor[" + port + "]. Is it running? Retrying in " + wait);
+                }
+                Thread.sleep(wait);
+            }
+            writer = new DataOutputStream(s.getOutputStream());
+            while (true) {
+                send(ALIVE + SEP + num + SEP + usagesToString());   // sends string of the form "ALIVE;0;Usages;erstelleAuftrag,15;bla,16"
+                Thread.sleep(ALIVE_INTERVAL_MILLIS);
+            }
+        }
+        catch (Exception e) {
+            Thread.currentThread().interrupt();
+        }
+    }
     private String usagesToString() {
         String s = "Usages";
         for (Map.Entry<String, Integer> e:usages.entrySet()) {
