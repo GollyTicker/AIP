@@ -5,6 +5,7 @@ import Utilities.TechnicalException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.*;
+import java.util.List;
 
 /**
  * Created by croehricht on 05.12.14.
@@ -29,12 +30,12 @@ public class DatabaseServer extends Thread {
         while (!isInterrupted()) {
             try {
                 Socket connectionSocket = server.accept();
-                DatabaseSkeleton skel = new DatabaseSkeleton(connectionSocket, dbService)
+                DatabaseSkeleton skel = new DatabaseSkeleton(connectionSocket, dbService);
                 skeletons.add(skel);
                 skel.start();
             } catch (IOException ex) {
                 Thread.currentThread().interrupt();
-            }
+        }
         }
     }
 

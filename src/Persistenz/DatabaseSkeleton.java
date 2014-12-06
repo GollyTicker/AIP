@@ -7,13 +7,13 @@ import java.io.*;
  * Created by croehricht on 05.12.14.
  */
 public class DatabaseSkeleton extends Thread {
-    private Socket connectionSocket;
+    private Socket socket;
     private BufferedReader inStream;
     private DataOutputStream outStream;
     private IPersistenzService dbService;
 
-    public DatabaseSkeleton(Socket connectionSocket, IPersistenzService dbService) {
-        this.connectionSocket = connectionSocket;
+    public DatabaseSkeleton(Socket socket, IPersistenzService dbService) {
+        this.socket = socket;
         this.dbService = dbService;
         try {
             this.inStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -25,7 +25,7 @@ public class DatabaseSkeleton extends Thread {
         while (!isInterrupted()) {
             try {
                 String call = inStream.readLine();
-                outStream.writeBytes(respondToCall(call));
+                outStream.writeBytes(respondToCall(call) + "\n");
             } catch (IOException ex) {
                 
             }
@@ -34,12 +34,13 @@ public class DatabaseSkeleton extends Thread {
 
     private String respondToCall(String call) {
         //TODO parse to crud operation on dbService
+        return "";
     }
 
     public void shutdown() {
         interrupt();
         try {
-            connectionSocket.close();
+            socket.close();
         } catch (IOException ex) {}
     }
 }

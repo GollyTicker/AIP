@@ -8,12 +8,17 @@ import java.io.*;
 import java.net.Socket;
 import static Utilities.TechnicalException.TECHEX;
 import static Utilities.NotFoundException.NFEX;
-
+import static Utilities.Constants.SEP;
 /**
  * Created by Swaneet on 04.12.2014.
  */
 public class DatabaseConnector implements IPersistenzService {
-    int port=0;
+    int port;
+    public static String CREATE = "create";
+    public static String READ = "read";
+    public static String UPDATE = "update";
+    public static String DELETE = "delete";
+
     Socket db;
     InputStream inputStream;
     OutputStream outputStream;
@@ -32,7 +37,7 @@ public class DatabaseConnector implements IPersistenzService {
 
     @Override
     public int create(String type, String typeRep) throws TechnicalException {
-        String request = "create;" + type + ";" + typeRep;
+        String request = CREATE + SEP + type + SEP + typeRep;
         try {
             send(request);
             String resp = receive();
@@ -49,7 +54,7 @@ public class DatabaseConnector implements IPersistenzService {
 
     @Override
     public String read(String type, int id) throws NotFoundException, TechnicalException {
-        String request = "read;" + type + ";" + id;
+        String request = READ + SEP + type + SEP + id;
         try {
             send(request);
             String resp = receive();
@@ -69,7 +74,7 @@ public class DatabaseConnector implements IPersistenzService {
 
     @Override
     public void update(String type, int id, String typeRep) throws NotFoundException, TechnicalException {
-        String request = "update;" + type + ";" + id + ";" + typeRep;
+        String request = UPDATE + SEP + type + SEP + id + SEP + typeRep;
         try {
             send(request);
             String resp = receive();
@@ -88,7 +93,7 @@ public class DatabaseConnector implements IPersistenzService {
 
     @Override
     public void delete(String type, int id) throws TechnicalException {
-        String request = "delete;" + type + ";" + id;
+        String request = DELETE + SEP + type + SEP + id;
         try {
             send(request);
             String resp = receive();
