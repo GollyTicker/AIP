@@ -11,9 +11,9 @@ import Auftragskomponente.IAuftragServicesFuerCallCenterUI;
 public class MPSSkeleton {
     IAuftragServicesFuerCallCenterUI afServ;
 
-    public MPSSkeleton(int skeletonPort, IAuftragServicesFuerCallCenterUI afServ) {
+    public MPSSkeleton(int skeletonPort, IAuftragServicesFuerCallCenterUI afServ, MPSReporter mpsReporter) {
         // listen on Port skeletonPort and return the results
-        Processor p = new Processor(afServ);
+        Processor p = new Processor(afServ, mpsReporter);
         // for each new Client start new Thread and process methods
         new MPSclientAcceptor(skeletonPort, p).start();
     }

@@ -46,13 +46,15 @@ public class MPS {
         afServ = afK;
         fServ.vermittleAufraegeAn(afVerm);
 
-        // MPS Skeleton starten. auf dem angegebenen Port und unter der Verwendung der angegebenen Services.
-        new MPSSkeleton(MPS_BASE_PORT+num, afServ);
-
+        MPSReporter mpsReporter = null;
         // I am Alive Thread starten
-        //if (INTEGRATED) {
-        //    new MPSReporter(num, MONITOR_LISTENER_PORT);
-        //}
+        if (INTEGRATED) {
+            mpsReporter = new MPSReporter(num, MONITOR_LISTENER_PORT);
+        }
+        // MPS Skeleton starten. auf dem angegebenen Port und unter der Verwendung der angegebenen Services.
+        new MPSSkeleton(MPS_BASE_PORT+num, afServ, mpsReporter);
+
+
 
         int anr = pServ.create(DatabaseConnection.ANGEBOT,"15,2,7,14.2");
         System.out.println("beispielangebot erzeugt ["+anr+"]");

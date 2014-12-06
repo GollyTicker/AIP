@@ -19,8 +19,10 @@ public class Processor {
     public static String ERSTELLE_AUFTRAG = "erstelleAuftrag";
 
     IAuftragServicesFuerCallCenterUI service;
-    public Processor(IAuftragServicesFuerCallCenterUI afServ) {
+    MPSReporter reporter;
+    public Processor(IAuftragServicesFuerCallCenterUI afServ, MPSReporter mpsReporter) {
         this.service = afServ;
+        this.reporter = mpsReporter;
     }
 
     public String processCommand(String req) {
@@ -33,6 +35,7 @@ public class Processor {
 
         String resp = "void";
         if (req.startsWith(ERSTELLE_AUFTRAG)) {
+            reporter.countUsage(ERSTELLE_AUFTRAG);
             int n = parseInt(req.split(SEP)[1]);
             AngebotsNr nr = angebotsNr(n);
             try {
