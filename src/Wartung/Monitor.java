@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 import static MPS.MPS.MPS_BASE_PORT;
+import static Utilities.Constants.SEP;
 
 /**
  * Created by Swaneet on 03.12.2014.
@@ -21,9 +22,12 @@ public class Monitor extends Thread{
     public static int ALIVE_TIMEOUT_MILLIS= 500;
     public static String ALIVE = "alive";
     ServerSocket serverSocket;
+    DashboardGUI gui;
     public static Map<Integer, String> mpssystems = new HashMap(); // stores the responses of the reporters
-
-    public Monitor() {
+    private static Map<Integer, Integer> uptime = new HashMap();
+    private static Map<Integer, Integer> downtime = new HashMap();
+    public Monitor(DashboardGUI gui) {
+        this.gui = gui;
         try {
             serverSocket = new ServerSocket(MONITOR_LISTENER_PORT);
             System.out.println("Monitor Listener [" + MONITOR_LISTENER_PORT+"]");
@@ -34,12 +38,26 @@ public class Monitor extends Thread{
         }
     }
 
+    // we get the state of some MPS system. Upgrade the state.
     synchronized public void recordState(Integer mpsNum, String state) {
         mpssystems.putIfAbsent(mpsNum, state);
+        String[] args = state.split(SEP);
+        String usage = "";
+        // "Alive;1;Usage;erstelleAngebot,15;bla,16"
+        // i = 3
+        // => "erstelleAngebot,15;bla,16"
+        for (int i = 3; i < args.length; i++) {
+            usage += SEP + args[i];
+        }
+        gui.statuses.put(mpsNum, usage);
+        gui.refreshServerList(mpssystems.keySet());
+        gui.isAlive.put(mpsNum, true);
     }
 
     synchronized public void deleteMPS(Integer mpsNum) {
         mpssystems.remove(mpsNum);
+        gui.isAlive.put(mpsNum,false);
+        gui.statuses.put(mpsNum, "NA");
     }
 
     public int getFirstMPSport() {

@@ -12,8 +12,7 @@ import Wartung.Monitor;
 import Wartung.ServerManager;
 
 import static Wartung.ServerManager.*;
-
-public class DashboardGUI extends JFrame{
+public class DashboardGUI extends JFrame {
 
 	Monitor monitor;
 	JList<String> listOfAllServers;
@@ -23,13 +22,12 @@ public class DashboardGUI extends JFrame{
 	JTextField upTimeTextPane;
 	private JTextField txtAvailableServers;
 	private JTextField dispatcherStatusTextField;
-    ServerManager smgr;
+    public Map<Integer, Boolean> isAlive = new HashMap();
+    public Map<Integer, String> statuses = new HashMap();
 	
-	public DashboardGUI(Monitor monitor, ServerManager smgr) {
-		
+	public DashboardGUI() {
 		JFrame houptFenster = new JFrame("Dashboard");
 		this.monitor = monitor;
-        this.smgr = smgr;
 		
 		setSize(500, 400);
 		setLocation(100,75);
@@ -42,13 +40,14 @@ public class DashboardGUI extends JFrame{
 		JButton btnStartServer = new JButton("Start Server");
 		btnStartServer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			}
+                System.out.println("What to do here?");
+            }
 		});
 		
 		btnStartServer.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-                smgr.startServer();
+                startServer();
 			}
         });
 		
@@ -64,12 +63,15 @@ public class DashboardGUI extends JFrame{
 		scrollPane.setViewportView(listOfAllServers);
 		listOfAllServers.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent arg0) {
+                Integer selected = -1;
 				if(!listOfAllServers.isSelectionEmpty()) {
 					String selectedElement = listOfAllServers.getSelectedValue();
-                    smgr.setSelectedServer(Integer.parseInt(selectedElement));
+                    selected = Integer.parseInt(selectedElement);
+                    setSelectedServer(selected);
 				} else {
-                    smgr.setSelectedServer(0);
+                    setSelectedServer(selected);
 				}
+                refreshSelectedServerState(selected);
 			}
 		});
 		
@@ -96,7 +98,7 @@ public class DashboardGUI extends JFrame{
 		killServerButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-                smgr.killServer(Integer.parseInt(listOfAllServers.getSelectedValue()));
+                killServer(Integer.parseInt(listOfAllServers.getSelectedValue()));
 			}
 		});
 		killServerButton.setBounds(277, 22, 112, 23);
@@ -118,9 +120,14 @@ public class DashboardGUI extends JFrame{
 		panel.add(dispatcherStatusTextField);
 		dispatcherStatusTextField.setColumns(10);
 		setVisible(true);
-		
 	}
-	
+
+    private void refreshSelectedServerState(Integer i) {
+        // setIdleAmount();
+        // setBusyAmount();
+        setDispatcherStatus(isAlive.get(i));
+        setStatusOfSelectedServer(statuses.getOrDefault(i, "NA"));
+    }
 	
 	synchronized public void setIdleAmount(int noOfIdleServers) {
 		downTimeTextPane.setText("DownTime: " + noOfIdleServers);
@@ -131,7 +138,6 @@ public class DashboardGUI extends JFrame{
 	}
 	
 	synchronized public void setDispatcherStatus(boolean alive) {
-
 		if(alive) {
 			dispatcherStatusTextField.setText("Dispatcher Status: I am Alive");
 		} else {
@@ -140,7 +146,7 @@ public class DashboardGUI extends JFrame{
 	}
 	
 	synchronized public void setStatusOfSelectedServer(String status) {
-		if(status == null) {
+		if(status == "NA") {
 			selectedServerStatusPane.setText("Not available");
 		} else {
 			selectedServerStatusPane.setText(status);
@@ -159,7 +165,6 @@ public class DashboardGUI extends JFrame{
 			listOfAllServers.setSelectedIndex(listOfAllServersListModel.getSize() - 1);
 		}
 	}
-	
 }
 	
 

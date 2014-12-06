@@ -16,7 +16,7 @@ import static java.lang.Integer.parseInt;
  * Created by Swaneet on 06.12.2014.
  */
 public class TestMPSConnector {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, TechnicalException {
         MPSConnector mps = new MPSConnector(9301);
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Write to test, f.e. \"0\". \"q\" to quit.");

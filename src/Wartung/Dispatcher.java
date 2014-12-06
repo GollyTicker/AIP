@@ -15,9 +15,11 @@ import java.io.IOException;
 public class Dispatcher implements IAuftragServicesFuerCallCenterUI {
     Monitor monitor;
     public Dispatcher() throws IOException {
-        this.monitor = new Monitor();
+        DashboardGUI gui = new DashboardGUI();
+        System.out.println("Dispatcher: DashBoardGUI erzeugt.");
+        this.monitor = new Monitor(gui);
         monitor.start();
-        // TODO: DashboardGUI starten
+        System.out.println("Dispatcher: Monitor erzeugt und gestartet.");
     }
 
     private MPSConnector getAvailibleMPS() throws TechnicalException{
