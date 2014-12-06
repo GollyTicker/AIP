@@ -31,13 +31,17 @@ public class MPSConnector implements IAuftragServicesFuerCallCenterUI {
     // simulates the MPS system from inside the Dispatcher.
     // needs the port on which the MPS server is listening.
 
-    public MPSConnector(int port) throws IOException {
-        this.port = port;
-        this.mpssocket = new Socket("localhost", port);
-        inputStream = mpssocket.getInputStream();
-        outputStream = mpssocket.getOutputStream();
-        reader = new BufferedReader(new InputStreamReader(inputStream));
-        writer = new DataOutputStream(outputStream);
+    public MPSConnector(int port) throws TechnicalException {
+        try {
+            this.port = port;
+            this.mpssocket = new Socket("localhost", port);
+            inputStream = mpssocket.getInputStream();
+            outputStream = mpssocket.getOutputStream();
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+            writer = new DataOutputStream(outputStream);
+        }catch (IOException e) {
+            throwNewTechnicalException(e.getMessage());
+        }
     }
 
     @Override

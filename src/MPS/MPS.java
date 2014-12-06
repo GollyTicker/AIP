@@ -23,7 +23,7 @@ import static Wartung.Monitor.MONITOR_LISTENER_PORT;
 // this is the main method for creating an entire MPS system.
 public class MPS {
     IAuftragServicesFuerCallCenterUI afServ;
-    static int MPS_BASE_PORT = 9300;
+    public static int MPS_BASE_PORT = 9300;
     static boolean INTEGRATED = true;   // set to true, to integrate it with other processes.
     public MPS(int num) throws Exception {
         // Konnektor zur Persistenz
