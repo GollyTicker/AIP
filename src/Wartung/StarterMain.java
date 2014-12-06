@@ -17,7 +17,7 @@ public class StarterMain {
 	public static void main(String[] args) throws UnknownHostException, IOException {
 
 		dispatcher = new Dispatcher();
-		DashboardGUI dashboard = new DashboardGUI(monitor, new ServerManager());
+		DashboardGUI dashboard = new DashboardGUI();
 
      }
 }

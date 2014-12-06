@@ -17,7 +17,7 @@ import static java.lang.Integer.parseInt;
  */
 public class TestMPSConnector {
     public static void main(String[] args) throws IOException, TechnicalException {
-        MPSConnector mps = new MPSConnector(9301);
+        MPSConnector mps = new MPSConnector(9302);
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Write to test, f.e. \"0\". \"q\" to quit.");
         String s =in.readLine();

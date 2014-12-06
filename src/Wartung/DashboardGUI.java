@@ -123,9 +123,12 @@ public class DashboardGUI extends JFrame {
 	}
 
     private void refreshSelectedServerState(Integer i) {
+        if (i.equals(new Integer(-1))){
+            return;
+        }
         // setIdleAmount();
         // setBusyAmount();
-        setDispatcherStatus(isAlive.get(i));
+        setDispatcherStatus(isAlive.getOrDefault(i, false));
         setStatusOfSelectedServer(statuses.getOrDefault(i, "NA"));
     }
 	
