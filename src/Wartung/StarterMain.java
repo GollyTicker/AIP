@@ -1,14 +1,11 @@
-package Fassade;
+package Wartung;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import Fassade.DashboardGUI;
+import Wartung.DashboardGUI;
 import Wartung.Dispatcher;
 import Wartung.Monitor;
 import Wartung.ServerManager;
-
-import java.awt.*;
 
 public class StarterMain {
 	
